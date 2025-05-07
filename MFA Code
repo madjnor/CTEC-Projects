@@ -1,0 +1,64 @@
+import random 
+import string 
+import time 
+
+ 
+def generate_password(length=12): 
+characters = string.ascii_letters + string.digits + 
+string.punctuation 
+password = ''.join(random.choice(characters) for i in 
+range(length)) 
+return password 
+def check_password_strength(password): 
+if len(password) < 12: 
+return "Weak" 
+if not any(char.islower() for char in password): 
+return "Weak" 
+if not any(char.isupper() for char in password): 
+return "Weak" 
+if not any(char.isdigit() for char in password): 
+return "Weak" 
+if not any(char in string.punctuation for char in password): 
+return "Weak" 
+return "Strong" 
+def generate_otp(): 
+otp = ''.join(random.choices(string.digits, k=6)) 
+return otp 
+def verify_otp(user_otp, generated_otp, start_time, 
+expiry_duration=60): 
+current_time = time.time() 
+if current_time - start_time > expiry_duration: 
+return False 
+return user_otp == generated_otp 
+def main(): 
+while True: 
+print("1. Generate a new password") 
+print("2. Test the strength of an existing password") 
+print("3. Verify login using OTP-based MFA") 
+print("4. Exit") 
+choice = input("Enter your choice: ") 
+if choice == '1': 
+password = generate_password() 
+print(f"Generated Password: {password}") 
+elif choice == '2': 
+password = input("Enter the password to test: ") 
+strength = check_password_strength(password) 
+print(f"Password Strength: {strength}") 
+elif choice == '3': 
+ 
+generated_otp = generate_otp() 
+print(f"Generated OTP: {generated_otp}") 
+start_time = time.time() 
+user_otp = input("Enter the OTP: ") 
+if verify_otp(user_otp, generated_otp, start_time): 
+print("OTP Verified Successfully") 
+else: 
+print("OTP Verification Failed or Expired") 
+ 
+elif choice == '4': 
+break 
+else: 
+print("Invalid choice. Please try again.") 
+ 
+if __name__ == "__main__": 
+main() 
